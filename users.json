@@ -1,5 +1,30 @@
 [
-  {"email":"coach@demo.com","pass":"coach2025","name":"Coach Demo","plan":"Pro","status":"active"},
-  {"email":"demo","pass":"demo","name":"Demo BoxCode","plan":"Pro","status":"active"},
-  {"email":"bezerradb@hotmail.com","pass":"123456","name":"Cfpx","plan":"Pro","status":"active"}
+  {
+    "email": "coach@demo.com",
+    "pass": "coach2025",
+    "name": "Coach Demo",
+    "plan": "Pro",
+    "status": "active"
+  },
+  {
+    "email": "demo",
+    "pass": "demo",
+    "name": "Demo BoxCode",
+    "plan": "Pro",
+    "status": "active"
+  },
+  {
+    "email": "bezerradb@hotmail.com",
+    "pass": "123456",
+    "name": "Cfpx",
+    "plan": "Pro",
+    "status": "active"
+  },
+  {
+    "email": "bezerradb@gmail.com",
+    "pass": "123456",
+    "name": "Buriri",
+    "plan": "Pro",
+    "status": "active"
+  }
 ]
