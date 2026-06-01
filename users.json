@@ -26,5 +26,12 @@
     "name": "Buriri",
     "plan": "Pro",
     "status": "active"
+  },
+  {
+    "email": "diego.bezerra@ppe.ufrj.br",
+    "pass": "123456",
+    "name": "Kkkkk",
+    "plan": "Pro",
+    "status": "active"
   }
 ]
