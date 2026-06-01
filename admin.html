@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>BoxCode — Admin</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --bg:#07080d;--surf:#0e1018;--card:#14161f;--card2:#1c1f2c;
+  --line:#ffffff0c;--line2:#ffffff16;
+  --fire:#FF3D00;--gold:#FFB300;--green:#22d17a;--red:#f87171;--blue:#60a5fa;
+  --txt:#eeeef5;--mid:#8892a4;--dim:#3a4058;
+}
+body{font-family:system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--txt);min-height:100vh;}
+
+/* ── LOGIN ── */
+.gate{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;
+  background:radial-gradient(ellipse 500px 300px at 50% 0%,#FF3D0018,transparent 60%);}
+.gate-box{width:100%;max-width:320px;background:var(--card);border:1px solid var(--line2);border-radius:16px;padding:28px 24px;text-align:center;}
+.gate-logo{font-size:32px;font-weight:900;letter-spacing:2px;margin-bottom:4px;}
+.gate-logo span{color:var(--fire);}
+.gate-badge{display:inline-block;background:#FF3D0020;border:1px solid #FF3D0040;color:var(--fire);
+  border-radius:20px;padding:3px 12px;font-size:9px;font-weight:700;letter-spacing:2px;margin-bottom:22px;}
+.gate-field{text-align:left;margin-bottom:12px;}
+.gate-field label{display:block;font-size:9px;letter-spacing:2px;color:var(--mid);font-weight:700;text-transform:uppercase;margin-bottom:5px;}
+.gate-field input{width:100%;padding:11px 13px;background:var(--card2);border:1.5px solid var(--line2);
+  border-radius:8px;color:var(--txt);font-size:14px;outline:none;}
+.gate-field input:focus{border-color:#FF3D0050;}
+.gate-btn{width:100%;padding:13px;background:var(--fire);border:none;border-radius:8px;
+  color:#fff;font-weight:900;font-size:14px;letter-spacing:1px;cursor:pointer;margin-top:4px;}
+.gate-err{color:var(--red);font-size:12px;margin-top:10px;padding:8px;background:#ef444415;border-radius:6px;}
+
+/* ── APP ── */
+.app{max-width:500px;margin:0 auto;padding:0 0 60px;}
+.topbar{display:flex;align-items:center;justify-content:space-between;
+  padding:14px 18px;border-bottom:1px solid var(--line2);background:var(--bg);
+  position:sticky;top:0;z-index:100;}
+.brand{font-weight:900;font-size:18px;letter-spacing:2px;}
+.brand span{color:var(--fire);}
+.admin-badge{background:#FF3D0020;border:1px solid #FF3D0040;color:var(--fire);
+  border-radius:6px;padding:3px 9px;font-size:9px;font-weight:700;letter-spacing:2px;}
+.logout-btn{background:none;border:1px solid var(--line2);border-radius:6px;
+  padding:4px 10px;color:var(--mid);font-size:10px;cursor:pointer;}
+
+/* ── CONFIG SECTION ── */
+.cfg-card{margin:16px 12px;background:var(--card);border:1px solid var(--line2);border-radius:12px;padding:18px;}
+.cfg-title{font-size:11px;font-weight:700;letter-spacing:2px;color:var(--gold);
+  text-transform:uppercase;margin-bottom:14px;display:flex;align-items:center;gap:7px;}
+.cfg-field{margin-bottom:10px;}
+.cfg-field label{display:block;font-size:9px;letter-spacing:1.5px;color:var(--mid);
+  font-weight:700;text-transform:uppercase;margin-bottom:5px;}
+.cfg-field input{width:100%;padding:10px 12px;background:var(--card2);border:1.5px solid var(--line2);
+  border-radius:8px;color:var(--txt);font-size:13px;outline:none;font-family:monospace;}
+.cfg-field input:focus{border-color:var(--gold);}
+.cfg-field input::placeholder{color:var(--dim);}
+.cfg-save{width:100%;padding:11px;background:var(--gold);border:none;border-radius:8px;
+  color:#000;font-weight:900;font-size:13px;letter-spacing:1px;cursor:pointer;margin-top:4px;}
+.cfg-hint{font-size:11px;color:var(--dim);margin-top:8px;line-height:1.6;}
+.cfg-hint a{color:var(--blue);text-decoration:none;}
+
+/* ── NOVO CLIENTE ── */
+.section{margin:0 12px 14px;}
+.sec-hdr{font-size:10px;letter-spacing:2px;color:var(--fire);font-weight:700;
+  text-transform:uppercase;padding:14px 0 10px;border-bottom:1px solid var(--line);margin-bottom:14px;}
+.form-card{background:var(--card);border:1px solid var(--line2);border-radius:12px;padding:18px;}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px;}
+.form-field{margin-bottom:10px;}
+.form-field label{display:block;font-size:9px;letter-spacing:1.5px;color:var(--mid);
+  font-weight:700;text-transform:uppercase;margin-bottom:5px;}
+.form-field input, .form-field select{
+  width:100%;padding:10px 12px;background:var(--card2);border:1.5px solid var(--line2);
+  border-radius:8px;color:var(--txt);font-size:13px;outline:none;}
+.form-field input:focus, .form-field select:focus{border-color:var(--fire);}
+.form-field select option{background:var(--card2);}
+.pass-row{display:flex;gap:8px;align-items:flex-end;}
+.pass-row input{flex:1;}
+.gen-pass{padding:10px 12px;background:var(--card2);border:1.5px solid var(--line2);
+  border-radius:8px;color:var(--mid);font-size:11px;cursor:pointer;white-space:nowrap;
+  font-weight:700;letter-spacing:1px;}
+.gen-pass:hover{border-color:var(--fire);color:var(--fire);}
+.add-btn{width:100%;padding:13px;background:var(--fire);border:none;border-radius:9px;
+  color:#fff;font-weight:900;font-size:14px;letter-spacing:1px;cursor:pointer;margin-top:4px;}
+.add-btn:disabled{opacity:.4;cursor:not-allowed;}
+
+/* ── STATUS ── */
+.status-box{margin:0 12px 14px;padding:12px 14px;border-radius:10px;font-size:13px;line-height:1.6;}
+.status-box.ok{background:#22d17a15;border:1px solid #22d17a30;color:var(--green);}
+.status-box.err{background:#ef444415;border:1px solid #ef444430;color:var(--red);}
+.status-box.loading{background:#60a5fa10;border:1px solid #60a5fa20;color:var(--blue);}
+
+/* ── LISTA DE CLIENTES ── */
+.client-card{background:var(--card);border:1px solid var(--line2);border-radius:10px;
+  padding:14px;margin-bottom:8px;}
+.cc-top{display:flex;align-items:center;gap:10px;margin-bottom:8px;}
+.cc-av{width:36px;height:36px;border-radius:9px;background:var(--fire);
+  display:flex;align-items:center;justify-content:center;font-weight:900;font-size:15px;
+  color:#fff;flex-shrink:0;}
+.cc-name{font-weight:700;font-size:14px;}
+.cc-email{font-size:11px;color:var(--mid);}
+.cc-status{margin-left:auto;font-size:9px;font-weight:700;letter-spacing:1px;
+  padding:3px 8px;border-radius:4px;text-transform:uppercase;}
+.cc-status.active{background:#22d17a20;color:var(--green);border:1px solid #22d17a40;}
+.cc-status.cancelled{background:#f8717120;color:var(--red);border:1px solid #f8717140;}
+.cc-status.suspended{background:#FFB30020;color:var(--gold);border:1px solid #FFB30040;}
+.cc-pass{background:var(--card2);border-radius:6px;padding:6px 10px;
+  font-family:monospace;font-size:12px;color:var(--blue);margin-bottom:8px;
+  display:flex;align-items:center;justify-content:space-between;}
+.cc-pass-copy{background:none;border:none;color:var(--mid);cursor:pointer;font-size:10px;}
+.cc-actions{display:flex;gap:6px;}
+.cc-btn{flex:1;padding:7px;border-radius:7px;border:none;font-size:11px;
+  font-weight:700;cursor:pointer;letter-spacing:.5px;}
+.cc-btn.suspend{background:#FFB30020;color:var(--gold);}
+.cc-btn.cancel{background:#f8717120;color:var(--red);}
+.cc-btn.reactivate{background:#22d17a20;color:var(--green);}
+.cc-btn:disabled{opacity:.3;cursor:not-allowed;}
+
+/* ── STATS ── */
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:12px 12px 0;}
+.stat{background:var(--card);border:1px solid var(--line2);border-radius:10px;padding:14px;text-align:center;}
+.stat-n{font-size:26px;font-weight:900;line-height:1;}
+.stat-l{font-size:10px;color:var(--mid);margin-top:4px;letter-spacing:1px;text-transform:uppercase;}
+
+/* ── EMPTY ── */
+.empty-list{text-align:center;padding:30px;color:var(--mid);font-size:13px;}
+</style>
+</head>
+<body>
+
+<!-- LOGIN GATE -->
+<div id="gate-screen">
+  <div class="gate">
+    <div class="gate-box">
+      <div class="gate-logo">BOX<span>CODE</span></div>
+      <div class="gate-badge">PAINEL ADMIN</div>
+      <div class="gate-field">
+        <label>Senha de Admin</label>
+        <input type="password" id="gate-pass" placeholder="••••••••" onkeydown="if(event.key==='Enter')gateLogin()">
+      </div>
+      <button class="gate-btn" onclick="gateLogin()">ENTRAR</button>
+      <div id="gate-err" class="gate-err" style="display:none"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ADMIN APP -->
+<div id="admin-app" style="display:none">
+  <div class="app">
+
+    <!-- TOPBAR -->
+    <div class="topbar">
+      <div class="brand">BOX<span>CODE</span></div>
+      <div style="display:flex;align-items:center;gap:8px;">
+        <div class="admin-badge">ADMIN</div>
+        <button class="logout-btn" onclick="adminLogout()">Sair</button>
+      </div>
+    </div>
+
+    <!-- STATS -->
+    <div class="stats" id="stats-row">
+      <div class="stat"><div class="stat-n" id="stat-total">—</div><div class="stat-l">Total</div></div>
+      <div class="stat"><div class="stat-n" style="color:var(--green)" id="stat-active">—</div><div class="stat-l">Ativos</div></div>
+      <div class="stat"><div class="stat-n" style="color:var(--red)" id="stat-off">—</div><div class="stat-l">Inativos</div></div>
+    </div>
+
+    <!-- CONFIG GITHUB -->
+    <div style="margin:16px 12px 0;">
+      <div class="cfg-title">⚙️ Configuração GitHub</div>
+    </div>
+    <div class="cfg-card" style="margin-top:0;">
+      <div class="cfg-field">
+        <label>GitHub Token (Personal Access Token)</label>
+        <input type="password" id="cfg-token" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx">
+      </div>
+      <div class="cfg-field">
+        <label>Repositório (usuario/repo)</label>
+        <input type="text" id="cfg-repo" placeholder="seuusuario/boxcode-app">
+      </div>
+      <button class="cfg-save" onclick="saveConfig()">💾 SALVAR CONFIGURAÇÃO</button>
+      <div class="cfg-hint">
+        Token: <a href="https://github.com/settings/tokens/new" target="_blank">github.com/settings/tokens</a> → "Generate new token (classic)" → marcar <strong>repo</strong> → copiar.<br>
+        Salvo só no seu celular (localStorage). Ninguém mais vê.
+      </div>
+    </div>
+
+    <!-- STATUS -->
+    <div id="status-msg" style="display:none"></div>
+
+    <!-- NOVO CLIENTE -->
+    <div class="section">
+      <div class="sec-hdr">➕ Novo Cliente</div>
+      <div class="form-card">
+        <div class="form-field">
+          <label>Nome do Box</label>
+          <input type="text" id="new-name" placeholder="CrossFit São Paulo">
+        </div>
+        <div class="form-field">
+          <label>Email (será o login)</label>
+          <input type="email" id="new-email" placeholder="coach@crossfitsp.com.br">
+        </div>
+        <div class="form-field">
+          <label>Senha</label>
+          <div class="pass-row">
+            <input type="text" id="new-pass" placeholder="CFsp2025">
+            <button class="gen-pass" onclick="generatePass()">🎲 GERAR</button>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-field" style="margin-bottom:0">
+            <label>Plano</label>
+            <select id="new-plan">
+              <option value="Pro">Pro</option>
+              <option value="Fundador">Fundador</option>
+            </select>
+          </div>
+          <div class="form-field" style="margin-bottom:0">
+            <label>Status</label>
+            <select id="new-status">
+              <option value="active">Ativo</option>
+              <option value="suspended">Suspenso</option>
+            </select>
+          </div>
+        </div>
+        <button class="add-btn" id="add-btn" onclick="addClient()">⚡ CRIAR ACESSO</button>
+      </div>
+    </div>
+
+    <!-- LISTA CLIENTES -->
+    <div class="section">
+      <div class="sec-hdr">👥 Clientes</div>
+      <div id="clients-list">
+        <div class="empty-list">Carregando clientes...</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+// ═══════════════════════════════════════
+// CONFIGURAÇÃO — altere aqui
+// ═══════════════════════════════════════
+const ADMIN_PASS   = "boxcode@admin2025";  // ← MUDE ESTA SENHA
+const USERS_FILE   = "users.json";         // arquivo no GitHub
+const BRANCH       = "main";
+
+// ── CLIENTES DEMO (usados se GitHub não configurado) ──
+const DEMO_USERS = [
+  {email:"coach@demo.com", pass:"coach2025", name:"Coach Demo",   plan:"Pro", status:"active"},
+  {email:"demo",           pass:"demo",       name:"Demo BoxCode", plan:"Pro", status:"active"}
+];
+
+// ═══════════════════════════════════════
+// ESTADO
+// ═══════════════════════════════════════
+let clients  = [];
+let fileSha  = "";
+
+function getConfig() {
+  return {
+    token: localStorage.getItem("bc_gh_token") || "",
+    repo:  localStorage.getItem("bc_gh_repo")  || "",
+  };
+}
+
+// ═══════════════════════════════════════
+// GATE LOGIN
+// ═══════════════════════════════════════
+function gateLogin() {
+  const v = document.getElementById("gate-pass").value;
+  if (v === ADMIN_PASS) {
+    document.getElementById("gate-screen").style.display = "none";
+    document.getElementById("admin-app").style.display   = "block";
+    loadConfig();
+    loadClients();
+  } else {
+    const el = document.getElementById("gate-err");
+    el.style.display = "block";
+    el.textContent = "Senha incorreta.";
+  }
+}
+document.getElementById("gate-pass").addEventListener("keydown", function(e){
+  if(e.key==="Enter") gateLogin();
+});
+
+function adminLogout() {
+  document.getElementById("gate-screen").style.display = "flex";
+  document.getElementById("admin-app").style.display   = "none";
+  document.getElementById("gate-pass").value = "";
+}
+
+// ═══════════════════════════════════════
+// CONFIG
+// ═══════════════════════════════════════
+function loadConfig() {
+  const c = getConfig();
+  if (c.token) document.getElementById("cfg-token").value = c.token;
+  if (c.repo)  document.getElementById("cfg-repo").value  = c.repo;
+}
+
+function saveConfig() {
+  const token = document.getElementById("cfg-token").value.trim();
+  const repo  = document.getElementById("cfg-repo").value.trim();
+  if (!token || !repo) { showStatus("Preencha token e repositório.", "err"); return; }
+  localStorage.setItem("bc_gh_token", token);
+  localStorage.setItem("bc_gh_repo",  repo);
+  showStatus("✅ Configuração salva! Carregando clientes...", "ok");
+  loadClients();
+}
+
+// ═══════════════════════════════════════
+// GITHUB API
+// ═══════════════════════════════════════
+async function ghGet() {
+  const {token, repo} = getConfig();
+  if (!token || !repo) return null;
+  try {
+    const r = await fetch("https://api.github.com/repos/" + repo + "/contents/" + USERS_FILE + "?ref=" + BRANCH, {
+      headers: { Authorization: "token " + token, Accept: "application/vnd.github.v3+json" }
+    });
+    if (!r.ok) return null;
+    const data = await r.json();
+    fileSha = data.sha;
+    return JSON.parse(atob(data.content.replace(/\n/g, "")));
+  } catch(e) { return null; }
+}
+
+async function ghPut(users) {
+  const {token, repo} = getConfig();
+  if (!token || !repo) return false;
+  try {
+    const content = btoa(unescape(encodeURIComponent(JSON.stringify(users, null, 2))));
+    const body = {
+      message: "BoxCode Admin: update users " + new Date().toISOString().slice(0,16),
+      content: content,
+      branch:  BRANCH,
+    };
+    if (fileSha) body.sha = fileSha;
+    const r = await fetch("https://api.github.com/repos/" + repo + "/contents/" + USERS_FILE, {
+      method:  "PUT",
+      headers: { Authorization: "token " + token, Accept: "application/vnd.github.v3+json", "Content-Type": "application/json" },
+      body:    JSON.stringify(body),
+    });
+    if (!r.ok) return false;
+    const data = await r.json();
+    fileSha = data.content.sha;
+    return true;
+  } catch(e) { return false; }
+}
+
+// ═══════════════════════════════════════
+// LOAD CLIENTS
+// ═══════════════════════════════════════
+async function loadClients() {
+  showStatus("⏳ Carregando clientes do GitHub...", "loading");
+  const data = await ghGet();
+  if (data) {
+    clients = data;
+    showStatus("", "");
+  } else {
+    clients = [...DEMO_USERS];
+    const {token, repo} = getConfig();
+    if (!token || !repo) {
+      showStatus("⚙️ Configure o GitHub acima para salvar alterações.", "loading");
+    } else {
+      showStatus("⚠️ Não foi possível carregar do GitHub. Verifique token e repositório.", "err");
+    }
+  }
+  renderClients();
+  renderStats();
+}
+
+// ═══════════════════════════════════════
+// RENDER
+// ═══════════════════════════════════════
+function renderStats() {
+  const real   = clients.filter(c => c.email !== "demo" && c.email !== "coach@demo.com");
+  const active = real.filter(c => c.status === "active").length;
+  document.getElementById("stat-total").textContent  = real.length;
+  document.getElementById("stat-active").textContent = active;
+  document.getElementById("stat-off").textContent    = real.length - active;
+}
+
+function renderClients() {
+  const el = document.getElementById("clients-list");
+  const real = clients.filter(c => c.email !== "demo" && c.email !== "coach@demo.com");
+  if (real.length === 0) {
+    el.innerHTML = '<div class="empty-list">Nenhum cliente ainda.<br>Adicione o primeiro acima ⬆️</div>';
+    return;
+  }
+  el.innerHTML = real.map(function(c, i) {
+    const idx   = clients.indexOf(c);
+    const ini   = (c.name || "?")[0].toUpperCase();
+    const sClass = c.status === "active" ? "active" : (c.status === "suspended" ? "suspended" : "cancelled");
+    const sLabel = c.status === "active" ? "Ativo" : (c.status === "suspended" ? "Suspenso" : "Cancelado");
+    const canSuspend   = c.status === "active";
+    const canCancel    = c.status !== "cancelled";
+    const canReactivate= c.status !== "active";
+    return '<div class="client-card">'
+      + '<div class="cc-top">'
+      + '<div class="cc-av">' + ini + '</div>'
+      + '<div><div class="cc-name">' + escHtml(c.name) + '</div><div class="cc-email">' + escHtml(c.email) + '</div></div>'
+      + '<div class="cc-status ' + sClass + '">' + sLabel + '</div>'
+      + '</div>'
+      + '<div class="cc-pass"><span>🔑 ' + escHtml(c.pass) + '</span>'
+      + '<button class="cc-pass-copy" onclick="copyPass(' + idx + ')">COPIAR</button></div>'
+      + '<div class="cc-actions">'
+      + (canReactivate ? '<button class="cc-btn reactivate" onclick="changeStatus(' + idx + ',\'active\')">✅ Reativar</button>' : '')
+      + (canSuspend    ? '<button class="cc-btn suspend"    onclick="changeStatus(' + idx + ',\'suspended\')">⏸ Suspender</button>' : '')
+      + (canCancel     ? '<button class="cc-btn cancel"     onclick="changeStatus(' + idx + ',\'cancelled\')">🚫 Cancelar</button>' : '')
+      + '</div>'
+      + '</div>';
+  }).join("");
+}
+
+function escHtml(s) {
+  return String(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+}
+
+// ═══════════════════════════════════════
+// ACTIONS
+// ═══════════════════════════════════════
+function generatePass() {
+  const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ0123456789";
+  let p = "";
+  for (let i=0;i<8;i++) p += chars[Math.floor(Math.random()*chars.length)];
+  document.getElementById("new-pass").value = p;
+}
+
+async function addClient() {
+  const name   = document.getElementById("new-name").value.trim();
+  const email  = document.getElementById("new-email").value.trim().toLowerCase();
+  const pass   = document.getElementById("new-pass").value.trim();
+  const plan   = document.getElementById("new-plan").value;
+  const status = document.getElementById("new-status").value;
+
+  if (!name || !email || !pass) { showStatus("Preencha nome, email e senha.", "err"); return; }
+  if (clients.find(c => c.email.toLowerCase() === email)) { showStatus("Este email já existe.", "err"); return; }
+
+  const btn = document.getElementById("add-btn");
+  btn.disabled = true;
+  btn.textContent = "SALVANDO...";
+  showStatus("⏳ Salvando no GitHub e disparando deploy...", "loading");
+
+  const newUser = {email, pass, name, plan, status};
+  const updated = [...clients, newUser];
+
+  const ok = await ghPut(updated);
+  if (ok) {
+    clients = updated;
+    renderClients();
+    renderStats();
+    document.getElementById("new-name").value  = "";
+    document.getElementById("new-email").value = "";
+    document.getElementById("new-pass").value  = "";
+    showStatus("✅ " + name + " adicionado! Deploy iniciado — app atualizado em ~40s.\n🔑 Login: " + email + " | Senha: " + pass, "ok");
+  } else {
+    showStatus("❌ Erro ao salvar no GitHub. Verifique token e repositório.", "err");
+  }
+  btn.disabled = false;
+  btn.textContent = "⚡ CRIAR ACESSO";
+}
+
+async function changeStatus(idx, newStatus) {
+  const c = clients[idx];
+  if (!c) return;
+  showStatus("⏳ Atualizando status...", "loading");
+  clients[idx] = Object.assign({}, c, {status: newStatus});
+  const ok = await ghPut(clients);
+  if (ok) {
+    renderClients();
+    renderStats();
+    const label = newStatus === "active" ? "reativado" : newStatus === "suspended" ? "suspenso" : "cancelado";
+    showStatus("✅ " + c.name + " " + label + ". Deploy iniciado — app atualizado em ~40s.", "ok");
+  } else {
+    clients[idx] = c; // revert
+    showStatus("❌ Erro ao salvar. Tente novamente.", "err");
+  }
+}
+
+function copyPass(idx) {
+  const c = clients[idx];
+  if (!c) return;
+  const txt = "BoxCode Pro\nLogin: " + c.email + "\nSenha: " + c.pass + "\nAcesso: " + window.location.origin + "/app";
+  navigator.clipboard.writeText(txt).then(function(){
+    showStatus("📋 Copiado! Cole no WhatsApp para o cliente.", "ok");
+  }).catch(function(){
+    showStatus("Login: " + c.email + " | Senha: " + c.pass, "ok");
+  });
+}
+
+// ═══════════════════════════════════════
+// STATUS
+// ═══════════════════════════════════════
+let statusTimer;
+function showStatus(msg, type) {
+  const el = document.getElementById("status-msg");
+  if (!msg) { el.style.display = "none"; return; }
+  el.className = "status-box " + type;
+  el.style.display = "block";
+  el.style.whiteSpace = "pre-line";
+  el.textContent = msg;
+  clearTimeout(statusTimer);
+  if (type === "ok") statusTimer = setTimeout(function(){ el.style.display="none"; }, 6000);
+  el.scrollIntoView({behavior:"smooth", block:"nearest"});
+}
+</script>
+</body>
+</html>
